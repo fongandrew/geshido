@@ -1,0 +1,38 @@
+{
+	"name": "geshido",
+	"version": "0.1.0",
+	"description": "Recurring task tracker",
+	"main": "public/index.js",
+	"scripts": {
+		"build": "npm run check && parcel build ./src/index.html --out-dir ./dist/public",
+		"check": "tsc --project ./src/tsconfig.json --noEmit",
+		"clean": "rimraf ./public",
+		"watch": "parcel ./src/*.html --out-dir ./public"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/fongandrew/geshido.git"
+	},
+	"author": "Andrew Fong",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/fongandrew/geshido/issues"
+	},
+	"homepage": "https://github.com/fongandrew/geshido#readme",
+	"devDependencies": {
+		"@types/react": "^16.8.13",
+		"@types/react-dom": "^16.8.4",
+		"@typescript-eslint/eslint-plugin": "^1.6.0",
+		"@typescript-eslint/parser": "^1.6.0",
+		"eslint": "^5.16.0",
+		"eslint-config-prettier": "^4.1.0",
+		"eslint-plugin-react": "^7.12.4",
+		"eslint-plugin-react-hooks": "^1.6.0",
+		"parcel-bundler": "^1.12.3",
+		"prettier": "^1.17.0",
+		"react": "^16.8.6",
+		"react-dom": "^16.8.6",
+		"rimraf": "^2.6.3",
+		"typescript": "^3.4.3"
+	}
+}

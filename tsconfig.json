@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        "alwaysStrict": true,
+        "esModuleInterop": true,
+        "downlevelIteration": true,
+        "forceConsistentCasingInFileNames": true,
+        "jsx": "preserve",
+        "module": "es2015",
+        "moduleResolution": "node",
+        "noImplicitReturns": true,
+        "outDir": "./public",
+        "skipLibCheck": true,
+        "sourceMap": true,
+        "strict": true,
+        "target": "es6"
+    },
+    "include": [
+        "src/**/*"
+    ]
+}
