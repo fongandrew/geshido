@@ -7,7 +7,8 @@
 		"build": "npm run check && parcel build ./src/index.html --out-dir ./dist/public",
 		"check": "tsc --project ./src/tsconfig.json --noEmit",
 		"clean": "rimraf ./public",
-		"watch": "parcel ./src/*.html --out-dir ./public"
+		"serve": "concurrently --kill-others \"npm run watch\" \"firebase serve\"",
+		"watch": "parcel watch ./src/*.html --out-dir ./public"
 	},
 	"repository": {
 		"type": "git",
@@ -24,10 +25,12 @@
 		"@types/react-dom": "^16.8.5",
 		"@typescript-eslint/eslint-plugin": "^1.13.0",
 		"@typescript-eslint/parser": "^1.13.0",
+		"concurrently": "^4.1.1",
 		"eslint": "^6.1.0",
 		"eslint-config-prettier": "^6.0.0",
 		"eslint-plugin-react": "^7.12.4",
 		"eslint-plugin-react-hooks": "^1.6.0",
+		"firebase-tools": "^7.2.2",
 		"parcel-bundler": "^1.12.3",
 		"prettier": "^1.17.0",
 		"react": "^16.9.0",
