@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "geshido-6a850"
+    "default": "geshido-6a850",
+    "production": "geshido-7ec5f"
   }
 }
