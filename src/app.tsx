@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Hello from './components/hello';
+import { Main } from './components/main';
 
 // Init
 const main = document.getElementById('js-main');
 if (main) {
-	ReactDOM.render(<Hello />, main);
+	ReactDOM.render(<Main />, main);
 }

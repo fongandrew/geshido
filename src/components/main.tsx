@@ -8,7 +8,7 @@ interface State {
 	count: number;
 }
 
-class Hello extends PureComponent<Props, State> {
+export class Main extends PureComponent<Props, State> {
 	constructor(props: Props) {
 		super(props);
 		this.state = {
@@ -41,5 +41,3 @@ class Hello extends PureComponent<Props, State> {
 		);
 	}
 }
-
-export default Hello;
