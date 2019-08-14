@@ -2,11 +2,10 @@
     "compilerOptions": {
         "allowSyntheticDefaultImports": true,
         "alwaysStrict": true,
-        "esModuleInterop": true,
         "downlevelIteration": true,
         "forceConsistentCasingInFileNames": true,
         "jsx": "preserve",
-        "module": "es2015",
+        "module": "esnext",
         "moduleResolution": "node",
         "noImplicitReturns": true,
         "outDir": "./public",
