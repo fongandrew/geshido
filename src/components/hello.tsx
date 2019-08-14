@@ -1,4 +1,6 @@
 import React, { PureComponent } from 'react';
+import { AuthCheck } from './auth-check';
+import { SigninSignoutButton } from './signin-signout-button';
 
 interface Props {}
 
@@ -24,10 +26,17 @@ class Hello extends PureComponent<Props, State> {
 	render() {
 		return (
 			<div>
-				<h1>Hello World</h1>
-				<button onClick={this.handleClick}>
-					Clicked {this.state.count} times
-				</button>
+				<nav>
+					<SigninSignoutButton />
+				</nav>
+				<main>
+					<AuthCheck>
+						<h1>Hello World</h1>
+						<button onClick={this.handleClick}>
+							Clicked {this.state.count} times
+						</button>
+					</AuthCheck>
+				</main>
 			</div>
 		);
 	}
