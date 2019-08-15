@@ -12,6 +12,7 @@ export interface Props {
 export function AuthCheck(props: Props) {
 	const { pending, data: user } = useCurrentUser();
 
+	return 123;
 	if (pending) return <span>Loading…</span>;
 	if (user) return <Fragment>{props.children}</Fragment>;
 	return (
