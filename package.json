@@ -4,7 +4,7 @@
 	"description": "Recurring task tracker",
 	"main": "public/index.js",
 	"scripts": {
-		"build": "npm run check && parcel build ./src/index.html --out-dir ./dist/public",
+		"build": "parcel build ./src/index.html --out-dir ./dist/public",
 		"check": "npm run lint && npm run typecheck",
 		"clean": "rimraf ./public",
 		"lint": "eslint --ext .js,.jsx,.ts,.tsx ./src",
