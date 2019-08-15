@@ -54,5 +54,11 @@ export type DocumentDataObject<T> = DataObject<T> & {
 	id: string;
 };
 
+/** Represents a Firestore document in a query */
+export type QueryDocumentDataObject<T> = ValidDataObject<T> & {
+	/** ID in collection */
+	id: string;
+};
+
 /** Represents a Firestore query response */
-export type QueryDataObject<T> = DataObject<DocumentDataObject<T>[]>;
+export type QueryDataObject<T> = DataObject<QueryDocumentDataObject<T>[]>;

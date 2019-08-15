@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
 import { AuthCheck } from './auth-check';
+import { ChecklistsList } from './checklists-list';
+import { CreateChecklist } from './create-checklist';
 import { SigninSignoutButton } from './signin-signout-button';
 
 interface Props {}
@@ -32,9 +34,8 @@ export class Main extends PureComponent<Props, State> {
 				<main>
 					<AuthCheck>
 						<h1>Hello World</h1>
-						<button onClick={this.handleClick}>
-							Clicked {this.state.count} times
-						</button>
+						<ChecklistsList />
+						<CreateChecklist />
 					</AuthCheck>
 				</main>
 			</div>
