@@ -56,6 +56,9 @@ export function useChecklistsForCurrentUser() {
  * @param id ID of checklist
  */
 export function useChecklist(id: string) {
-	const ref = useSelector(id => db.collection(COLLECTION_NAME).doc(id), [id]);
+	const ref = useSelector(
+		docId => db.collection(COLLECTION_NAME).doc(docId),
+		[id]
+	);
 	return useDocument<Checklist>(ref);
 }

@@ -10,7 +10,7 @@ export function ChecklistsList() {
 	if (checklists.error)
 		return <span>There was an error loading your data.</span>;
 	if (!checklists.data || !checklists.data.length)
-		return <span>{'No checklists found'}</span>;
+		return <span>No checklists found</span>;
 
 	return (
 		<ul>

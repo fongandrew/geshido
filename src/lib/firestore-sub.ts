@@ -67,6 +67,7 @@ export function useQuery<T>(query: MemoizedQuery) {
 				snapshot => {
 					const data = [...(state.data || [])];
 					snapshot.docChanges().forEach(change => {
+						const current = data[change.oldIndex];
 						switch (change.type) {
 							case 'added':
 							case 'modified':
@@ -78,7 +79,6 @@ export function useQuery<T>(query: MemoizedQuery) {
 							case 'removed':
 								// Firestore oldIndex assumes all prior docChanges
 								// have bee applied. Let's sanity check though.
-								const current = data[change.oldIndex];
 								if (
 									current &&
 									current.id &&

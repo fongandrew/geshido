@@ -9,7 +9,7 @@ export function CreateChecklist() {
 	const [valid, setValid] = useState(false);
 	const setInputState = (value: string) => {
 		setName(value);
-		setValid(value ? true : false);
+		setValid(!!value);
 	};
 
 	const handleInputChange = useCallback(
