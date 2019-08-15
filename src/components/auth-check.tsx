@@ -6,7 +6,7 @@ import { useCurrentUser } from '../lib/auth';
 import { SigninSignoutButton } from './signin-signout-button';
 
 export interface Props {
-	children: null;
+	children: React.ReactNode;
 }
 
 export function AuthCheck(props: Props) {
