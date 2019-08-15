@@ -6,13 +6,12 @@ import { useCurrentUser } from '../lib/auth';
 import { SigninSignoutButton } from './signin-signout-button';
 
 export interface Props {
-	children: React.ReactNode;
+	children: null;
 }
 
 export function AuthCheck(props: Props) {
 	const { pending, data: user } = useCurrentUser();
 
-	return 123;
 	if (pending) return <span>Loading…</span>;
 	if (user) return <Fragment>{props.children}</Fragment>;
 	return (
