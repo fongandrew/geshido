@@ -1,6 +1,6 @@
 import { firestore } from 'firebase/app';
 import { createAction } from '../lib/actions';
-import { checkType } from '../lib/check-type';
+import { checkFirestoreType } from '../lib/check-firestore-type';
 import { db } from '../lib/firebase';
 import { useSelector } from '../lib/firestore-selector';
 import { useDocument, useQuery } from '../lib/firestore-sub';
@@ -20,22 +20,17 @@ export const TASKS_COLLECTION_NAME = 'topics';
  */
 export const createTaskForChecklist = createAction(
 	'Create topic for a given list',
-	async (checklistId: string, topic: { name: string }) => {
-		// Check with actual Date because the serverTimestamp below will screw
-		// up the type checking.
-		const checkedTask = checkType<Task>({
-			...topic,
-			lastTouched: new Date(),
-		});
-
+	async (checklistId: string, task: { name: string }) => {
 		return db
 			.collection(CHECKLISTS_COLLECTION_NAME)
 			.doc(checklistId)
 			.collection(TASKS_COLLECTION_NAME)
-			.add({
-				...checkedTask,
-				lastTouched: firestore.FieldValue.serverTimestamp(),
-			});
+			.add(
+				checkFirestoreType<Task>({
+					...task,
+					lastTouched: firestore.FieldValue.serverTimestamp(),
+				})
+			);
 	}
 );
 

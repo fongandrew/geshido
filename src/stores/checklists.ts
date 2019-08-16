@@ -1,5 +1,5 @@
 import { createAction } from '../lib/actions';
-import { checkType } from '../lib/check-type';
+import { checkFirestoreType } from '../lib/check-firestore-type';
 import { auth, db } from '../lib/firebase';
 import { UserNotLoggedInError } from '../lib/firestore-errors';
 import { useSelector } from '../lib/firestore-selector';
@@ -26,7 +26,7 @@ export const createChecklistForCurrentUser = createAction(
 	async (list: { name: string }) => {
 		if (!auth.currentUser) throw new UserNotLoggedInError();
 		return db.collection(CHECKLISTS_COLLECTION_NAME).add(
-			checkType<Checklist>({
+			checkFirestoreType<Checklist>({
 				...list,
 				permissions: {
 					[auth.currentUser.uid]: [READ, WRITE],
