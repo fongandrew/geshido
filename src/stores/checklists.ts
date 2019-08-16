@@ -15,7 +15,7 @@ export interface Checklist extends HasPermissions {
 	name: string;
 }
 
-export const COLLECTION_NAME = 'checklists';
+export const CHECKLISTS_COLLECTION_NAME = 'checklists';
 
 /**
  * Createlist for current user
@@ -25,7 +25,7 @@ export const createChecklistForCurrentUser = createAction(
 	'Create list for current user',
 	async (list: { name: string }) => {
 		if (!auth.currentUser) throw new UserNotLoggedInError();
-		return db.collection(COLLECTION_NAME).add(
+		return db.collection(CHECKLISTS_COLLECTION_NAME).add(
 			checkType<Checklist>({
 				...list,
 				permissions: {
@@ -44,7 +44,7 @@ export function useChecklistsForCurrentUser() {
 	const query = useSelector(
 		currentUserId =>
 			db
-				.collection(COLLECTION_NAME)
+				.collection(CHECKLISTS_COLLECTION_NAME)
 				.where(...firestorePermissionQuery(currentUserId, READ)),
 		[auth.currentUser.uid]
 	);
@@ -57,7 +57,7 @@ export function useChecklistsForCurrentUser() {
  */
 export function useChecklist(id: string) {
 	const ref = useSelector(
-		docId => db.collection(COLLECTION_NAME).doc(docId),
+		docId => db.collection(CHECKLISTS_COLLECTION_NAME).doc(docId),
 		[id]
 	);
 	return useDocument<Checklist>(ref);

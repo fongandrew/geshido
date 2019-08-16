@@ -4,14 +4,24 @@ service cloud.firestore {
 
     // Our standard permission model checks a permissions property for the
     // requested permission (or a special "all" permission)
-    function hasPermission(permission) {
+    function hasPermission(data, permission) {
       return request.auth.uid != null
-        && permission in resource.data.permissions[request.auth.uid];
+        && permission in data.permissions[request.auth.uid];
     }
 
     match /checklists/{checklistId} {
-      allow read: if hasPermission('read');
-      allow write: if hasPermission('write') || resource == null;
+      allow read: if hasPermission(resource.data, 'read');
+      allow write: if resource == null || hasPermission(resource.data, 'write');
+
+      // Get parent checklist for subcollections
+      function parentData() {
+        return get(/databases/$(database)/documents/checklists/$(checklistId)).data;
+      }
+      
+      match /{document=**} {
+        allow read: if hasPermission(parentData(), 'read');
+        allow write: if hasPermission(parentData(), 'write');
+      }
     }
 
      match /test/{document=**} {

@@ -4,6 +4,8 @@
 import React from 'react';
 import { AuthCheck } from '../auth-check';
 import { useChecklist } from '../../stores/checklists';
+import { TasksList } from './tasks-list';
+import { CreateTask } from './create-task';
 
 export interface Props {
 	id: string;
@@ -17,6 +19,8 @@ export function Checklist({ id }: Props) {
 		<AuthCheck>
 			<div>
 				<h2>{checklist.name}</h2>
+				<TasksList checklistId={id} />
+				<CreateTask checklistId={id} />
 			</div>
 		</AuthCheck>
 	);
