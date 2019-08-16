@@ -1,8 +1,18 @@
 import React from 'react';
-import { AuthCheck } from './auth-check';
-import { ChecklistsList } from './checklists-list';
-import { CreateChecklist } from './create-checklist';
+import { Checklist } from './checklist';
+import { Home } from './home';
 import { SigninSignoutButton } from './signin-signout-button';
+import { useRoute } from '../lib/routes';
+
+function MainContent() {
+	const route = useRoute();
+	switch (route.type) {
+		case 'checklist':
+			return <Checklist id={route.id} />;
+		default:
+			return <Home />;
+	}
+}
 
 export function Main() {
 	return (
@@ -11,11 +21,7 @@ export function Main() {
 				<SigninSignoutButton />
 			</nav>
 			<main>
-				<AuthCheck>
-					<h1>Hello World</h1>
-					<ChecklistsList />
-					<CreateChecklist />
-				</AuthCheck>
+				<MainContent />
 			</main>
 		</div>
 	);

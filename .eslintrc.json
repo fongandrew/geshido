@@ -25,6 +25,7 @@
 		"react-hooks/rules-of-hooks": "error",
 		"react/destructuring-assignment": "off",
 		"react/jsx-indent": "off",
-		"react/jsx-indent-props": "off"
+		"react/jsx-indent-props": "off",
+		"react/prop-types": "off"
 	}
 }

@@ -1,5 +1,6 @@
 import React from 'react';
-import { useChecklistsForCurrentUser } from '../stores/checklists';
+import { useChecklistsForCurrentUser } from '../../stores/checklists';
+import { RouteLink } from '../route-link';
 
 /**
  * React component for a list of checklists this user has created
@@ -15,7 +16,11 @@ export function ChecklistsList() {
 	return (
 		<ul>
 			{checklists.data.map(list => (
-				<li key={list.id}>{list.data.name}</li>
+				<li key={list.id}>
+					<RouteLink route={{ type: 'checklist', id: list.id }}>
+						{list.data.name}
+					</RouteLink>
+				</li>
 			))}
 		</ul>
 	);
