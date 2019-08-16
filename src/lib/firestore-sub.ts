@@ -60,42 +60,55 @@ export function useQuery<T>(query: MemoizedQuery) {
 	const [state, dispatch] = useReducer(
 		(
 			queryState: QueryDataObject<T>,
-			change:
-				| (firebase.firestore.DocumentChange & { error?: undefined })
+			action:
+				| {
+						snapshot: firebase.firestore.QuerySnapshot;
+						error?: undefined;
+				  }
 				| { error: Error }
 		): QueryDataObject<T> => {
-			if (change.error) {
-				return { error: change.error };
+			if (action.error) {
+				return { error: action.error };
+			}
+
+			const { snapshot } = action;
+			if (snapshot.empty && queryState.pending) {
+				return { data: [] };
 			}
 
 			const data = [...(queryState.data || [])];
-			const current = data[change.oldIndex];
-			switch (change.type) {
-				case 'added':
-				case 'modified':
-					data[change.newIndex] = {
-						id: change.doc.id,
-						data: change.doc.data() as T,
-					};
-					break;
-				case 'removed':
-					// Firestore oldIndex assumes all prior docChanges
-					// have bee applied. Let's sanity check though.
-					if (current && current.id && current.id === change.doc.id) {
-						data.splice(change.oldIndex, 1);
-					} else {
+			snapshot.docChanges().forEach(change => {
+				const current = data[change.oldIndex];
+				switch (change.type) {
+					case 'added':
+					case 'modified':
+						data[change.newIndex] = {
+							id: change.doc.id,
+							data: change.doc.data() as T,
+						};
+						break;
+					case 'removed':
+						// Firestore oldIndex assumes all prior docChanges
+						// have bee applied. Let's sanity check though.
+						if (
+							current &&
+							current.id &&
+							current.id === change.doc.id
+						) {
+							data.splice(change.oldIndex, 1);
+						} else {
+							logger.error(
+								`Invalid ID for doc removal: ${change.doc.id}`
+							);
+						}
+						break;
+					default:
+						// Unexpected, so return exact same state
 						logger.error(
-							`Invalid ID for doc removal: ${change.doc.id}`
+							`Unexpected doc change type: ${change.type}`
 						);
-					}
-					break;
-				default:
-					// Unexpected, so return exact same state
-					logger.error(`Unexpected doc change type: ${change.type}`);
-					return queryState;
-			}
-
-			// If we get here, we got new data, so return ne wobject
+				}
+			});
 			return { data };
 		},
 		{
@@ -108,9 +121,7 @@ export function useQuery<T>(query: MemoizedQuery) {
 			// onSnapshot returns an unsubscribe function that useEffect
 			// takes advantage of when unmounting
 			query.onSnapshot(
-				snapshot => {
-					snapshot.docChanges().forEach(change => dispatch(change));
-				},
+				snapshot => dispatch({ snapshot }),
 				error => {
 					logger.error(error);
 					dispatch({ error });

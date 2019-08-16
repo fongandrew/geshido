@@ -12,7 +12,7 @@ export function TasksList(props: Props) {
 	const tasks = useTasksForChecklist(props.checklistId);
 	if (tasks.pending) return <span>Loading…</span>;
 	if (tasks.error) return <span>There was an error loading your data.</span>;
-	if (!tasks.data || !tasks.data.length) return <span>No found</span>;
+	if (!tasks.data || !tasks.data.length) return <span>No tasks found</span>;
 
 	return (
 		<ul>
