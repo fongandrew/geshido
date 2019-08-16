@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useReducer } from 'react';
 import { DocumentDataObject, QueryDataObject } from './data';
 import * as logger from './logger';
 import { DocumentDoesNotExistError } from './firestore-errors';
@@ -55,9 +55,53 @@ export function useDocument<T>(ref: MemoizedDocumentReference) {
  * @returns List of documents + some metadata
  */
 export function useQuery<T>(query: MemoizedQuery) {
-	const [state, setState] = useState<QueryDataObject<T>>({
-		pending: true,
-	});
+	// useReducer instead of setState because we'd otherwise have to pass
+	// state to useEffect, which triggers an infinite render loop
+	const [state, dispatch] = useReducer(
+		(
+			queryState: QueryDataObject<T>,
+			change:
+				| (firebase.firestore.DocumentChange & { error?: undefined })
+				| { error: Error }
+		): QueryDataObject<T> => {
+			if (change.error) {
+				return { error: change.error };
+			}
+
+			const data = [...(queryState.data || [])];
+			const current = data[change.oldIndex];
+			switch (change.type) {
+				case 'added':
+				case 'modified':
+					data[change.newIndex] = {
+						id: change.doc.id,
+						data: change.doc.data() as T,
+					};
+					break;
+				case 'removed':
+					// Firestore oldIndex assumes all prior docChanges
+					// have bee applied. Let's sanity check though.
+					if (current && current.id && current.id === change.doc.id) {
+						data.splice(change.oldIndex, 1);
+					} else {
+						logger.error(
+							`Invalid ID for doc removal: ${change.doc.id}`
+						);
+					}
+					break;
+				default:
+					// Unexpected, so return exact same state
+					logger.error(`Unexpected doc change type: ${change.type}`);
+					return queryState;
+			}
+
+			// If we get here, we got new data, so return ne wobject
+			return { data };
+		},
+		{
+			pending: true,
+		}
+	);
 
 	useEffect(
 		() =>
@@ -65,50 +109,16 @@ export function useQuery<T>(query: MemoizedQuery) {
 			// takes advantage of when unmounting
 			query.onSnapshot(
 				snapshot => {
-					const data = [...(state.data || [])];
-					snapshot.docChanges().forEach(change => {
-						const current = data[change.oldIndex];
-						switch (change.type) {
-							case 'added':
-							case 'modified':
-								data[change.newIndex] = {
-									id: change.doc.id,
-									data: change.doc.data() as T,
-								};
-								break;
-							case 'removed':
-								// Firestore oldIndex assumes all prior docChanges
-								// have bee applied. Let's sanity check though.
-								if (
-									current &&
-									current.id &&
-									current.id === change.doc.id
-								) {
-									data.splice(change.oldIndex, 1);
-								} else {
-									logger.error(
-										`Invalid ID for doc removal: ${
-											change.doc.id
-										}`
-									);
-								}
-								break;
-							default:
-								logger.error(
-									`Unexpected doc change type: ${change.type}`
-								);
-						}
-					});
-					setState({ data });
+					snapshot.docChanges().forEach(change => dispatch(change));
 				},
 				error => {
 					logger.error(error);
-					setState({ error });
+					dispatch({ error });
 				}
 			),
 		// This is fine because it's a MemoizedDocumentReference and not a
 		// regular Firestore document reference
-		[query, state.data]
+		[query]
 	);
 
 	return state;
