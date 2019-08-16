@@ -1,7 +1,7 @@
 import React from 'react';
 import { Checklist } from './checklist';
 import { Home } from './home';
-import { SigninSignoutButton } from './signin-signout-button';
+import { Nav } from './nav';
 import { useRoute } from '~/lib/routes';
 
 function MainContent() {
@@ -17,9 +17,7 @@ function MainContent() {
 export function Main() {
 	return (
 		<div>
-			<nav>
-				<SigninSignoutButton />
-			</nav>
+			<Nav />
 			<main>
 				<MainContent />
 			</main>
