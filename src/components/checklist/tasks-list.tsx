@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTasksForChecklist } from '../../stores/tasks';
+import { useTasksForChecklist } from '~/stores/tasks';
 
 export interface Props {
 	checklistId: string;

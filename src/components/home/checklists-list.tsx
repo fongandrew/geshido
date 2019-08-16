@@ -1,6 +1,6 @@
 import React from 'react';
-import { useChecklistsForCurrentUser } from '../../stores/checklists';
-import { RouteLink } from '../route-link';
+import { useChecklistsForCurrentUser } from '~/stores/checklists';
+import { RouteLink } from '~/components/route-link';
 
 /**
  * React component for a list of checklists this user has created

@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { createChecklistForCurrentUser } from '../../stores/checklists';
+import { createChecklistForCurrentUser } from '~/stores/checklists';
 
 /**
  * Input + button to create a new Checklist

@@ -2,8 +2,8 @@
  * Page for individual checklist
  */
 import React from 'react';
-import { AuthCheck } from '../auth-check';
-import { useChecklist } from '../../stores/checklists';
+import { AuthCheck } from '~/components/auth-check';
+import { useChecklist } from '~/stores/checklists';
 import { TasksList } from './tasks-list';
 import { CreateTask } from './create-task';
 

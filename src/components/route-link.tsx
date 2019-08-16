@@ -1,6 +1,6 @@
 import { isEqual } from 'lodash';
 import React from 'react';
-import { Route, pathForRoute } from '../lib/routes';
+import { Route, pathForRoute } from '~/lib/routes';
 import { Link } from './kit/link';
 
 export interface Props

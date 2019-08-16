@@ -2,7 +2,7 @@
  * Wrapper component for anchor link to handle navigation stuff
  */
 import React, { useCallback } from 'react';
-import { isExternal, navigateTo } from '../../lib/navigation';
+import { isExternal, navigateTo } from '~/lib/navigation';
 
 export interface Props extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
 	/** Make href required for link */

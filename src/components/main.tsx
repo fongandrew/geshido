@@ -2,7 +2,7 @@ import React from 'react';
 import { Checklist } from './checklist';
 import { Home } from './home';
 import { SigninSignoutButton } from './signin-signout-button';
-import { useRoute } from '../lib/routes';
+import { useRoute } from '~/lib/routes';
 
 function MainContent() {
 	const route = useRoute();

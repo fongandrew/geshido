@@ -2,7 +2,7 @@
  * React component that displays Firebase auth UI if we're not logged in
  */
 import React, { Fragment } from 'react';
-import { useCurrentUser } from '../lib/auth';
+import { useCurrentUser } from '~/lib/auth';
 import { SigninSignoutButton } from './signin-signout-button';
 
 export interface Props {

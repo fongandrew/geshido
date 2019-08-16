@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import { useCurrentUser, signInWithGoogle, signOut } from '../lib/auth';
-import { error } from '../lib/logger';
+import { useCurrentUser, signInWithGoogle, signOut } from '~/lib/auth';
+import { error } from '~/lib/logger';
 
 /**
  * React component for button to sign in with Google or sign out

@@ -1,5 +1,5 @@
 import React from 'react';
-import { AuthCheck } from '../auth-check';
+import { AuthCheck } from '~/components/auth-check';
 import { ChecklistsList } from './checklists-list';
 import { CreateChecklist } from './create-checklist';
 

@@ -1,9 +1,9 @@
 import { firestore } from 'firebase/app';
-import { createAction } from '../lib/actions';
-import { checkFirestoreType } from '../lib/check-firestore-type';
-import { db } from '../lib/firebase';
-import { useSelector } from '../lib/firestore-selector';
-import { useDocument, useQuery } from '../lib/firestore-sub';
+import { createAction } from '~/lib/actions';
+import { checkFirestoreType } from '~/lib/check-firestore-type';
+import { db } from '~/lib/firebase';
+import { useSelector } from '~/lib/firestore-selector';
+import { useDocument, useQuery } from '~/lib/firestore-sub';
 import { CHECKLISTS_COLLECTION_NAME } from './checklists';
 
 export interface Task {
