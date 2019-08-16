@@ -2,7 +2,8 @@
 	"files.exclude": {
 		".cache": true,
 		"node_modules": true,
-		"public": true
+		"public": true,
+		"dist": true
 	},
 	"[javascript]": {
 		"editor.formatOnSave": true
