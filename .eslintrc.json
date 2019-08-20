@@ -13,19 +13,35 @@
 	],
 	"plugins": ["@typescript-eslint", "react-hooks"],
 	"rules": {
-		"@typescript-eslint/explicit-member-accessibility": "off",
-		"@typescript-eslint/explicit-function-return-type": "off",
-		"@typescript-eslint/no-empty-interface": "off",
-		"@typescript-eslint/no-explicit-any": "off",
-		"import/no-unresolved": "off",
 		"import/prefer-default-export": "off",
 		"import/no-default-export": "warn",
-		"no-undef": "off",
 		"prefer-destructuring": "off",
 		"react-hooks/rules-of-hooks": "error",
 		"react/destructuring-assignment": "off",
 		"react/jsx-indent": "off",
 		"react/jsx-indent-props": "off",
-		"react/prop-types": "off"
-	}
+		"react/prop-types": "off",
+		"spaced-comment": ["warn", "always", { "markers": ["/"] }]
+	},
+	"overrides": [
+        {
+            "files": ["*.ts", "*.tsx"],
+            "rules": {
+				"@typescript-eslint/explicit-member-accessibility": "off",
+				"@typescript-eslint/explicit-function-return-type": "off",
+				"@typescript-eslint/no-empty-interface": "off",
+				"@typescript-eslint/no-explicit-any": "off",
+				"import/no-unresolved": "off",
+				"no-undef": "off"
+			}
+        },
+        {
+			"files": ["*.cy.js"],
+			"globals": {
+				"cy": true,
+				"describe": true,
+				"it": true
+			}
+        }
+    ]
 }

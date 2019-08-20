@@ -23,6 +23,7 @@ export function SigninSignoutButton() {
 			type="button"
 			disabled={pending || inProgress}
 			onClick={handleClick}
+			data-testid={user ? 'signout-btn' : 'signin-btn'}
 		>
 			{user ? 'Sign out' : 'Sign in with Google'}
 		</button>
