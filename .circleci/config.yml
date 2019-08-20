@@ -1,29 +1,129 @@
-version: 2
-jobs:
-  build:
+version: 2.1
+
+commands:
+  # Save and restore NPM stuff between builds for perf
+  save_npm_cache:
+    steps:
+      - save_cache:
+          key: v1-npm-{{ .Branch }}-{{ checksum "package.json" }}
+          paths:
+            - ~/.npm
+            - ~/.cache
+  restore_npm_cache:
+    steps:
+      - restore_cache:
+          key: v1-npm-{{ .Branch }}-{{ checksum "package.json" }}
+
+  # Save and restore the entire project directory for use between jobs
+  save_project:
+    steps:
+      - save_cache:
+          key: v1-checkout-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - ~/project
+            - ~/.cache # For Cypress binary + among other things
+  restore_project:
+    steps:
+      - restore_cache:
+          key: v1-checkout-{{ .Environment.CIRCLE_SHA1 }}
+
+  # Save and restore the build between jobs for deployment purposes
+  save_build:
+    steps:
+      - save_cache:
+          key: v1-build-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - ./public
+  restore_build:
+    steps:
+      - restore_cache:
+          keys:
+            - v1-checkout-{{ .Environment.CIRCLE_SHA1 }}
+      - restore_cache:
+          keys:
+            - v1-build-{{ .Environment.CIRCLE_SHA1 }}
+
+executors:
+  default:
     docker:
       - image: circleci/node:lts
+    working_directory: ~/project
+
+jobs:
+  setup:
+    executor: default
     steps:
       - checkout
       - run:
           name: update-npm
           command: 'sudo npm install -g npm@latest'
-      - restore_cache: # special step to restore the dependency cache
-          # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
-          key: dependency-cache-{{ checksum "package.json" }}
+      - restore_npm_cache
       - run:
           name: install-npm
-          command: npm install
-      - save_cache: # special step to save the dependency cache
-          key: dependency-cache-{{ checksum "package.json" }}
-          paths:
-            - ./node_modules
-      - run: # Lint
-          name: lint
-          command: npm run lint
-      - run: # TypeScript check
-          name: typecheck
-          command: npm run typecheck
-      - run: # Verify we can build
-          name: build
+          command: npm ci
+      - save_npm_cache
+      - save_project
+
+  # Requires setup
+  build:
+    executor: default
+    steps:
+      - restore_project
+      - run:
+          name: Parcel prod build
           command: npm run build
+      - save_build
+
+  # Requires setup
+  lint:
+    executor: default
+    steps:
+      - restore_project
+      - run:
+          name: ESLint check
+          command: npm run lint
+
+  # Requires setup
+  typecheck:
+    executor: default
+    steps:
+      - restore_project
+      - run:
+          name: TypeScript check
+          command: npm run typecheck
+
+  # Requires build
+  deploy_dev:
+    executor: default
+    steps:
+      - restore_build
+      - run:
+          name: Use Firebase dev environemnt
+          command: ./node_modules/.bin/firebase use default --token=$FIREBASE_TOKEN_DEV
+      - run:
+          name: Deploy to Firebase dev environemnt
+          command: ./node_modules/.bin/firebase deploy --token=$FIREBASE_TOKEN_DEV
+
+workflows:
+  version: '2'
+  
+  build_and_deploy:
+    jobs:
+      - setup
+      - lint:
+          requires:
+            - setup
+      - typecheck:
+          requires:
+            - setup
+      - build:
+          requires:
+            - setup
+            - lint
+            - typecheck
+      - deploy_dev:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master

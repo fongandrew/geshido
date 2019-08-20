@@ -4,10 +4,11 @@
 	"description": "Recurring task tracker",
 	"main": "public/index.js",
 	"scripts": {
-		"build": "parcel build ./src/index.html --out-dir ./dist/public",
+		"build": "parcel build ./src/index.html --out-dir ./public",
 		"check": "npm run lint && npm run typecheck",
 		"clean": "rimraf ./public",
 		"cypress": "cypress open",
+		"deploy": "firebase deploy",
 		"lint": "eslint --ext .js,.jsx,.ts,.tsx ./src",
 		"serve": "concurrently --kill-others \"npm run watch\" \"firebase serve\"",
 		"typecheck": "tsc --project ./tsconfig.json --noEmit",
