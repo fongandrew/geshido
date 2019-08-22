@@ -43,10 +43,17 @@ commands:
           keys:
             - v1-build-{{ .Environment.CIRCLE_SHA1 }}
 
+  # Switch Firebase environments
+  use_firebase_dev:
+    steps:
+      - run:
+          name: Use Firebase dev environemnt
+          command: npm run firebase:use-dev -- --token=$FIREBASE_TOKEN_DEV
+
 executors:
   default:
     docker:
-      - image: circleci/node:lts
+      - image: cypress/browsers:chrome69
     working_directory: ~/project
 
 jobs:
@@ -56,7 +63,7 @@ jobs:
       - checkout
       - run:
           name: update-npm
-          command: 'sudo npm install -g npm@latest'
+          command: 'npm install -g npm@latest'
       - restore_npm_cache
       - run:
           name: install-npm
@@ -71,7 +78,7 @@ jobs:
       - restore_project
       - run:
           name: Parcel prod build
-          command: npm run build
+          command: npm run parcel:build
       - save_build
 
   # Requires setup
@@ -81,7 +88,7 @@ jobs:
       - restore_project
       - run:
           name: ESLint check
-          command: npm run lint
+          command: npm run eslint
 
   # Requires setup
   typecheck:
@@ -90,19 +97,27 @@ jobs:
       - restore_project
       - run:
           name: TypeScript check
-          command: npm run typecheck
+          command: npm run tsc:check
+
+  # Requires build
+  cypress:
+    executor: default
+    steps:
+      - restore_build
+      - use_firebase_dev
+      - run:
+          name: Cypress
+          command: ./node_modules/.bin/start-server-and-test "npm run firebase:serve -- --token=$FIREBASE_TOKEN_DEV" http://localhost:5000 "npm run cypress:run -- --record --key $CYPRESS_KEY"
 
   # Requires build
   deploy_dev:
     executor: default
     steps:
       - restore_build
-      - run:
-          name: Use Firebase dev environemnt
-          command: ./node_modules/.bin/firebase use default --token=$FIREBASE_TOKEN_DEV
+      - use_firebase_dev
       - run:
           name: Deploy to Firebase dev environemnt
-          command: ./node_modules/.bin/firebase deploy --token=$FIREBASE_TOKEN_DEV
+          command: npm run firebase:deploy -- --token=$FIREBASE_TOKEN_DEV
 
 workflows:
   version: '2'
@@ -121,9 +136,13 @@ workflows:
             - setup
             - lint
             - typecheck
+      - cypress:
+          requires:
+            - build
       - deploy_dev:
           requires:
             - build
+            - cypress
           filters:
             branches:
               only: master

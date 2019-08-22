@@ -4,15 +4,22 @@
 	"description": "Recurring task tracker",
 	"main": "public/index.js",
 	"scripts": {
-		"build": "parcel build ./src/index.html --out-dir ./public",
-		"check": "npm run lint && npm run typecheck",
+		"build": "npm run clean && npm run parcel:build",
 		"clean": "rimraf ./public",
-		"cypress": "cypress open",
-		"deploy": "firebase deploy",
-		"lint": "eslint --ext .js,.jsx,.ts,.tsx ./src",
-		"serve": "concurrently --kill-others \"npm run watch\" \"firebase serve\"",
-		"typecheck": "tsc --project ./tsconfig.json --noEmit",
-		"watch": "parcel watch ./src/*.html --out-dir ./public"
+		"cypress": "npm run cypress:open",
+		"cypress:open": "cypress open",
+		"cypress:run": "cypress run",
+		"eslint": "eslint --ext .js,.jsx,.ts,.tsx ./src",
+		"firebase:deploy": "firebase deploy",
+		"firebase:serve": "firebase serve",
+		"firebase:use-dev": "firebase use default",
+		"firebase:use-prod": "firebase use production",
+		"lint": "npm run eslint && npm run tsc:check",
+		"parcel:build": "parcel build ./src/index.html --out-dir ./public",
+		"parcel:watch": "parcel watch ./src/*.html --out-dir ./public",
+		"start": "concurrently --kill-others \"npm run parcel:watch\" \"npm run firebase:serve\"",
+		"test:e2e": "npm run build && start-server-and-test firebase:serve http://localhost:5000 cypress:run",
+		"tsc:check": "tsc --project ./tsconfig.json --noEmit"
 	},
 	"repository": {
 		"type": "git",
@@ -52,6 +59,7 @@
 		"lodash": "^4.17.15",
 		"react": "^16.9.0",
 		"react-dom": "^16.9.0",
-		"regenerator-runtime": "^0.13.3"
+		"regenerator-runtime": "^0.13.3",
+		"start-server-and-test": "^1.10.0"
 	}
 }
