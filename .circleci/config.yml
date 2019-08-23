@@ -109,7 +109,7 @@ jobs:
           command: npm run tsc:check
 
   # Requires build
-  cypress:
+  e2e:
     executor: default
     steps:
       - restore_build
@@ -149,13 +149,13 @@ workflows:
             - lint
             - typecheck
             - unit_test
-      - cypress:
+      - e2e:
           requires:
             - build
       - deploy_dev:
           requires:
             - build
-            - cypress
+            - e2e
           filters:
             branches:
               only: master
