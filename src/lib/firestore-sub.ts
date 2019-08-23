@@ -1,5 +1,9 @@
 import { useState, useEffect, useReducer } from 'react';
-import { DocumentDataObject, QueryDataObject } from './data';
+import {
+	DocumentDataObject,
+	QueryDocumentDataObject,
+	QueryDataObject,
+} from './data';
 import * as logger from './logger';
 import { DocumentDoesNotExistError } from './firestore-errors';
 import { MemoizedDocumentReference, MemoizedQuery } from './firestore-selector';
@@ -76,37 +80,50 @@ export function useQuery<T>(query: MemoizedQuery) {
 				return { data: [] };
 			}
 
-			const data = [...(queryState.data || [])];
+			// Preserve map of docs by key so we can reuse objects
+			// for reference equality
+			const docMap: Record<
+				string,
+				QueryDocumentDataObject<T> | void
+			> = {};
+			(queryState.data || []).forEach(doc => {
+				docMap[doc.id] = doc;
+			});
+
+			// Modify data as needed
 			snapshot.docChanges().forEach(change => {
-				const current = data[change.oldIndex];
 				switch (change.type) {
 					case 'added':
 					case 'modified':
-						data[change.newIndex] = {
+						docMap[change.doc.id] = {
 							id: change.doc.id,
 							data: change.doc.data() as T,
 						};
 						break;
 					case 'removed':
-						// Firestore oldIndex assumes all prior docChanges
-						// have bee applied. Let's sanity check though.
-						if (
-							current &&
-							current.id &&
-							current.id === change.doc.id
-						) {
-							data.splice(change.oldIndex, 1);
-						} else {
-							logger.error(
-								`Invalid ID for doc removal: ${change.doc.id}`
-							);
-						}
+						// Can ignore since we iterate through below
+						// and reconstruct hash on each snapshot
 						break;
 					default:
 						// Unexpected, so return exact same state
 						logger.error(
 							`Unexpected doc change type: ${change.type}`
 						);
+				}
+			});
+
+			// Use order given by snapshot
+			const data: QueryDocumentDataObject<T>[] = [];
+			snapshot.docs.forEach(docRef => {
+				const docData = docMap[docRef.id];
+				if (docData) {
+					data.push(docData);
+				} else {
+					logger.error(`Missing doc ID in map: ${docRef.id}`);
+					data.push({
+						id: docRef.id,
+						data: docRef.data() as T,
+					});
 				}
 			});
 			return { data };
