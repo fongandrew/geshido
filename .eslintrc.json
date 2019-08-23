@@ -11,7 +11,7 @@
 		"prettier",
 		"prettier/@typescript-eslint"
 	],
-	"plugins": ["@typescript-eslint", "react-hooks"],
+	"plugins": ["@typescript-eslint", "jest", "react-hooks"],
 	"rules": {
 		"import/prefer-default-export": "off",
 		"import/no-default-export": "warn",
@@ -41,7 +41,22 @@
 				"cy": true,
 				"describe": true,
 				"it": true
+			},
+			"rules": {
+				"import/no-extraneous-dependencies": "off"
 			}
-        }
+		},
+		{
+			"env": {
+				"jest/globals": true
+			},
+			"files": ["*.jest.*", "**/test-utils/**/*"],
+			"rules": {
+				"import/no-extraneous-dependencies": "off",
+				"jest/no-disabled-tests": "warn",
+				"jest/no-focused-tests": "error",
+				"jest/no-identical-title": "error"
+			}
+		}
     ]
 }
