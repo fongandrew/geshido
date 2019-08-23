@@ -25,7 +25,7 @@ export function useLocation() {
  * @returns True if external
  */
 export function isExternal(path: string) {
-	const pathToTest = path.startsWith('//') ? `https${path}` : path;
+	const pathToTest = path.startsWith('//') ? `https:${path}` : path;
 	let url: URL;
 	try {
 		url = new URL(pathToTest);
