@@ -36,7 +36,7 @@ export function CreateTask(props: Props) {
 	);
 
 	return (
-		<form onSubmit={handleSubmit}>
+		<form onSubmit={handleSubmit} data-testid="create-task__form">
 			<input value={name} onChange={handleInputChange} />
 			<button type="submit" disabled={!valid}>
 				Submit

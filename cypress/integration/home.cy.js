@@ -20,7 +20,7 @@ describe('Home page', () => {
 
 		// Verify we're hiding UI elements that don't work if logged out
 		cy.get('main')
-			.find('[data-testid="create-checklist-form"]')
+			.find('[data-testid="create-checklist__form"]')
 			.should('not.be.visible');
 	});
 });

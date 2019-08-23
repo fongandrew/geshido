@@ -32,7 +32,7 @@ export function CreateChecklist() {
 	);
 
 	return (
-		<form onSubmit={handleSubmit} data-testid="create-checklist-form">
+		<form onSubmit={handleSubmit} data-testid="create-checklist__form">
 			<input value={name} onChange={handleInputChange} />
 			<button type="submit" disabled={!valid}>
 				Submit

@@ -16,7 +16,7 @@ export function ChecklistsList() {
 	return (
 		<ul data-testid="checklists-list">
 			{checklists.data.map(list => (
-				<li key={list.id} data-testid="checklists-item">
+				<li key={list.id} data-testid="checklists-list__item">
 					<RouteLink route={{ type: 'checklist', id: list.id }}>
 						{list.data.name}
 					</RouteLink>

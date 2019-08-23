@@ -18,7 +18,7 @@ export function Checklist({ id }: Props) {
 	return (
 		<AuthCheck>
 			<div>
-				<h2>{checklist.name}</h2>
+				<h2 data-testid="checklist__heading">{checklist.name}</h2>
 				<TasksList checklistId={id} />
 				<CreateTask checklistId={id} />
 			</div>
