@@ -38,9 +38,12 @@
         {
 			"files": ["cypress/**/*", "*.cy.js"],
 			"globals": {
+				"Cypress": true,
 				"cy": true,
 				"describe": true,
-				"it": true
+				"it": true,
+				"beforeEach": true,
+				"afterEach": true
 			},
 			"rules": {
 				"import/no-extraneous-dependencies": "off"
