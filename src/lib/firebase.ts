@@ -6,3 +6,6 @@ import 'firebase/firestore';
 
 export const auth = firebase.auth();
 export const db = firebase.firestore();
+
+// Expose firebase for debugging / Cypress tests
+(window as any).firebase = firebase;

@@ -11,12 +11,12 @@ export function ChecklistsList() {
 	if (checklists.error)
 		return <span>There was an error loading your data.</span>;
 	if (!checklists.data || !checklists.data.length)
-		return <span>No checklists found</span>;
+		return <span data-testid="checklists-list">No checklists found</span>;
 
 	return (
-		<ul>
+		<ul data-testid="checklists-list">
 			{checklists.data.map(list => (
-				<li key={list.id}>
+				<li key={list.id} data-testid="checklists-item">
 					<RouteLink route={{ type: 'checklist', id: list.id }}>
 						{list.data.name}
 					</RouteLink>
