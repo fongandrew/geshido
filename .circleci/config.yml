@@ -91,6 +91,15 @@ jobs:
           command: npm run eslint
 
   # Requires setup
+  unit_test:
+    executor: default
+    steps:
+      - restore_project
+      - run:
+          name: Jest
+          command: npm run jest
+
+  # Requires setup
   typecheck:
     executor: default
     steps:
@@ -131,11 +140,15 @@ workflows:
       - typecheck:
           requires:
             - setup
+      - unit_test:
+          requires:
+            - setup
       - build:
           requires:
             - setup
             - lint
             - typecheck
+            - unit_test
       - cypress:
           requires:
             - build
