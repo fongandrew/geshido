@@ -1,6 +1,7 @@
 import { createAction } from '~/lib/actions';
+import { getCurrentUser } from '~/lib/auth';
 import { checkFirestoreType } from '~/lib/check-firestore-type';
-import { auth, db } from '~/lib/firebase';
+import { db } from '~/lib/firebase';
 import { UserNotLoggedInError } from '~/lib/firestore-errors';
 import { useSelector } from '~/lib/firestore-selector';
 import { useDocument, useQuery } from '~/lib/firestore-sub';
@@ -24,13 +25,14 @@ export const CHECKLISTS_COLLECTION_NAME = 'checklists';
 export const createChecklistForCurrentUser = createAction(
 	'Create list for current user',
 	async (list: { name: string }) => {
-		if (!auth.currentUser) throw new UserNotLoggedInError();
+		const currentUser = getCurrentUser();
+		if (!currentUser) throw new UserNotLoggedInError();
 		return db.collection(CHECKLISTS_COLLECTION_NAME).add(
 			checkFirestoreType<Checklist>({
 				...list,
 				permissions: {
-					[READ]: [auth.currentUser.uid],
-					[WRITE]: [auth.currentUser.uid],
+					[READ]: [currentUser.uid],
+					[WRITE]: [currentUser.uid],
 				},
 			})
 		);
@@ -41,13 +43,14 @@ export const createChecklistForCurrentUser = createAction(
  * React hook to query all checklists owned by current user
  */
 export function useChecklistsForCurrentUser() {
-	if (!auth.currentUser) throw new UserNotLoggedInError();
+	const currentUser = getCurrentUser();
+	if (!currentUser) throw new UserNotLoggedInError();
 	const query = useSelector(
 		currentUserId =>
 			db
 				.collection(CHECKLISTS_COLLECTION_NAME)
 				.where(...firestorePermissionQuery(currentUserId, READ)),
-		[auth.currentUser.uid]
+		[currentUser.uid]
 	);
 	return useQuery<Checklist>(query);
 }

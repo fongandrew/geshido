@@ -7,24 +7,32 @@ import { auth } from './firebase';
 // Set default for auth language
 auth.useDeviceLanguage();
 
+// Wrapper around auth.currentUser since Firestore doesn't reliably
+// update this right away sometimes
+let currentUser = auth.currentUser;
+export function getCurrentUser() {
+	return currentUser;
+}
+
 /**
  * React hook to subscribe to Firebase auth changes
  * @returns data wrapper around current user, if any
  */
 export function useCurrentUser() {
-	const currentUser = auth.currentUser;
-	const initialState: DataObject<firebase.User | null> = currentUser
-		? {
-				data: currentUser,
-		  }
-		: { pending: true };
-	const [state, setState] = useState(initialState);
+	const [state, setState] = useState<DataObject<firebase.User | null>>({
+		pending: true,
+	});
 
 	useEffect(
 		() =>
 			// onAuthStateChanged returns an unsubscribe function that
 			// useEffect takes advantage of when unmounting
-			auth.onAuthStateChanged(user => setState({ data: user })),
+			auth.onAuthStateChanged(user => {
+				setState({ data: user });
+				if (currentUser !== user) {
+					currentUser = user;
+				}
+			}),
 		[] // Empty array so we don't re-subscribe on each render
 	);
 
