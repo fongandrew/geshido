@@ -29,7 +29,8 @@ export const createChecklistForCurrentUser = createAction(
 			checkFirestoreType<Checklist>({
 				...list,
 				permissions: {
-					[auth.currentUser.uid]: [READ, WRITE],
+					[READ]: [auth.currentUser.uid],
+					[WRITE]: [auth.currentUser.uid],
 				},
 			})
 		);

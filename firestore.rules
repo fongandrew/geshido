@@ -6,7 +6,7 @@ service cloud.firestore {
     // requested permission (or a special "all" permission)
     function hasPermission(data, permission) {
       return request.auth.uid != null
-        && permission in data.permissions[request.auth.uid];
+        && request.auth.uid in data.permissions[permission];
     }
 
     match /checklists/{checklistId} {

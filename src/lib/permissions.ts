@@ -23,9 +23,7 @@ export const ALL_PERMISSIONS = [READ, WRITE];
  * Interface for a model object with basic permissions interface
  */
 export interface HasPermissions<P extends Permission = READ | WRITE> {
-	permissions: {
-		[userId: string]: P[] | undefined;
-	};
+	permissions: { [permission in P]?: string[] };
 }
 
 /**
@@ -38,5 +36,5 @@ export function firestorePermissionQuery(
 	userId: string,
 	permission: Permission
 ): [string, firebase.firestore.WhereFilterOp, string] {
-	return [`permissions.${userId}`, 'array-contains', permission];
+	return [`permissions.${permission}`, 'array-contains', userId];
 }
