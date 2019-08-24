@@ -48,17 +48,17 @@ export type DataObject<T> =
 	| ErroredDataObject<T>
 	| ValidDataObject<T>;
 
-/** Represents a Firestore document */
-export type DocumentDataObject<T> = DataObject<T> & {
+/** Extra document (vs. query) metadata */
+export interface DocumentMetadata {
 	/** ID in collection */
 	id: string;
-};
+}
+
+/** Represents a Firestore document */
+export type DocumentDataObject<T> = DataObject<T> & DocumentMetadata;
 
 /** Represents a Firestore document in a query */
-export type QueryDocumentDataObject<T> = ValidDataObject<T> & {
-	/** ID in collection */
-	id: string;
-};
+export type QueryDocumentDataObject<T> = ValidDataObject<T> & DocumentMetadata;
 
 /** Represents a Firestore query response */
 export type QueryDataObject<T> = DataObject<QueryDocumentDataObject<T>[]>;
