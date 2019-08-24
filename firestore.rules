@@ -3,7 +3,7 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     // Our standard permission model checks a permissions property for the
-    // requested permission (or a special "all" permission)
+    // requested permission
     function hasPermission(data, permission) {
       return request.auth.uid != null
         && request.auth.uid in data.permissions[permission];
