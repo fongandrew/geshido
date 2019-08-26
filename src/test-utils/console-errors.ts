@@ -6,6 +6,11 @@ const original = {
 /* eslint-enable no-console */
 
 beforeEach(() => {
+	if (!process.env.DEBUG) {
+		jest.spyOn(console, 'debug').mockImplementation(() => {});
+		jest.spyOn(console, 'info').mockImplementation(() => {});
+	}
+
 	jest.spyOn(console, 'warn').mockImplementation((...args) => {
 		original.warn(...args);
 		throw new Error(`Unexpected console.warn: ${args[0]}`);

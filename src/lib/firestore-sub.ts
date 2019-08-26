@@ -9,6 +9,84 @@ import { DocumentDoesNotExistError } from './firestore-errors';
 import { MemoizedDocumentReference, MemoizedQuery } from './firestore-selector';
 
 /**
+ * Intervals, in ms, that we want to attempt to retry snapshot subscriptions
+ * before erroring. See snapshotWithRetries below.
+ */
+const RETRY_INTERVALS = [250, 500, 1000, 2000];
+
+/** Error messages on which we can retry. See snapshotWithRetries below. */
+const RETRYABLE_ERRS: Record<string, true | undefined> = {
+	'Missing or insufficient permissions.': true,
+};
+
+/**
+ * Wrapper around .onSnapshot for Firestore documents that implements retries
+ * on certain errors.
+ *
+ * By design, we allow interaction with things that haven't been saved
+ * to Firestore yet. Firestore's offline handling means this mostly works.
+ * But sometimes this results in permission errors because Firestore doesn't
+ * guarantee snapshot subscription requests and writes are sequenced in any
+ * particular way.
+ *
+ * That is, it's possible for our subscription to a document to happen
+ * before that document is committed (especially if we're interacting very
+ * quickly with the UI in CI or we're toggling offline / online mode).
+ * Workaround for this is just to retry after a fixed time interval.
+ *
+ * @param documentOrQuery - Firestore document
+ * @param observer - Snapshot observer callback
+ * @param errorHandler - Handle error if all retries fail
+ * @returns - Unsubscribe function
+ */
+function snapshotWithRetries<
+	S,
+	T extends {
+		onSnapshot: (
+			observer: (snapshot: S) => void,
+			errorHandler?: (err: Error) => void
+		) => () => void;
+	}
+>(
+	documentOrQuery: T,
+	observer: (snapshot: S) => void,
+	errorHandler?: (err: Error) => void
+): () => void {
+	let currentUnsubscribe: () => void;
+	function unsubscribe() {
+		if (currentUnsubscribe) {
+			currentUnsubscribe();
+		}
+	}
+
+	let retryCount = 0;
+
+	const subscribe = () => {
+		currentUnsubscribe = documentOrQuery.onSnapshot(
+			(snapshot: S) => {
+				retryCount = 0; // Reset on success
+				observer(snapshot);
+			},
+			(err: Error) => {
+				if (
+					err &&
+					RETRYABLE_ERRS[err.message] &&
+					retryCount < RETRY_INTERVALS.length
+				) {
+					retryCount += 1;
+					setTimeout(subscribe, RETRY_INTERVALS[retryCount]);
+				} else if (errorHandler) {
+					errorHandler(err);
+				}
+			}
+		);
+	};
+	subscribe();
+
+	return unsubscribe;
+}
+
+/**
  * Hook to subscribe to a single Firestore document
  * @param ref A document reference that is referentially equal on each render
  * @returns Most recent snapshot + some metadata
@@ -21,9 +99,13 @@ export function useDocument<T>(ref: MemoizedDocumentReference) {
 
 	useEffect(
 		() =>
-			// onSnapshot returns an unsubscribe function that useEffect
+			// Returns an unsubscribe function that useEffect
 			// takes advantage of when unmounting
-			ref.onSnapshot(
+			snapshotWithRetries<
+				firebase.firestore.DocumentSnapshot,
+				firebase.firestore.DocumentReference
+			>(
+				ref,
 				snapshot => {
 					const { id } = ref;
 
@@ -135,9 +217,13 @@ export function useQuery<T>(query: MemoizedQuery) {
 
 	useEffect(
 		() =>
-			// onSnapshot returns an unsubscribe function that useEffect
+			// Returns an unsubscribe function that useEffect
 			// takes advantage of when unmounting
-			query.onSnapshot(
+			snapshotWithRetries<
+				firebase.firestore.QuerySnapshot,
+				firebase.firestore.Query
+			>(
+				query,
 				snapshot => dispatch({ snapshot }),
 				error => {
 					logger.error(error);
