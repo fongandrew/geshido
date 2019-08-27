@@ -11,7 +11,7 @@ export interface Task {
 	lastTouched: Date;
 }
 
-export const TASKS_COLLECTION_NAME = 'topics';
+export const TASKS_COLLECTION_NAME = 'tasks';
 
 /**
  * Create list for current user and topic
