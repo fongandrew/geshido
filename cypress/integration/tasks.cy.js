@@ -38,5 +38,10 @@ describe('Tasks', () => {
 			.click();
 		getItem('Task 2').should('be.visible');
 		getItem('Task 1').should('be.visible');
+
+		// Tasks persist on reload
+		cy.location(location => location.reload());
+		getItem('Task 1').should('be.visible');
+		getItem('Task 2').should('be.visible');
 	});
 });
