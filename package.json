@@ -9,7 +9,7 @@
 		"cypress": "npm run cypress:open",
 		"cypress:open": "cypress open",
 		"cypress:run": "cypress run",
-		"eslint": "eslint --ext .js,.jsx,.ts,.tsx ./src",
+		"eslint": "eslint --ext .js,.jsx,.ts,.tsx ./src ./cypress",
 		"firebase:deploy": "firebase deploy",
 		"firebase:serve": "firebase serve",
 		"firebase:use-dev": "firebase use default",
