@@ -18,7 +18,11 @@ export function TasksList(props: Props) {
 	return (
 		<ul data-testid="tasks-list">
 			{tasks.data.map(task => (
-				<li key={task.id} data-testid="tasks-list__item">
+				<li
+					key={task.id}
+					data-testid="tasks-list__item"
+					data-taskid={task.id}
+				>
 					{task.data.name}
 				</li>
 			))}

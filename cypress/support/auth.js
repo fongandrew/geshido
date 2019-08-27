@@ -1,9 +1,11 @@
 export function signOut() {
+	cy.log('Signing out');
 	cy.window().should('have.property', 'firebase');
 	return cy.window().then(win => win.firebase.auth().signOut());
 }
 
 export function signIn() {
+	cy.log('Signing in as new anonymous user');
 	signOut();
 	cy.window().should('have.property', 'firebase');
 	return cy.window().then(win => win.firebase.auth().signInAnonymously());
