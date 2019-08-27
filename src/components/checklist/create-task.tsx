@@ -1,4 +1,7 @@
 import React, { useState, useCallback } from 'react';
+import { Button } from '~/components/kit/button';
+import { Form } from '~/components/kit/form';
+import { Text } from '~/components/kit/text';
 import { createTaskForChecklist } from '~/stores/tasks';
 
 export interface Props {
@@ -36,11 +39,11 @@ export function CreateTask(props: Props) {
 	);
 
 	return (
-		<form onSubmit={handleSubmit} data-testid="create-task__form">
-			<input value={name} onChange={handleInputChange} />
-			<button type="submit" disabled={!valid}>
+		<Form onSubmit={handleSubmit} data-testid="create-task__form">
+			<Text value={name} onChange={handleInputChange} />
+			<Button type="submit" disabled={!valid}>
 				Submit
-			</button>
-		</form>
+			</Button>
+		</Form>
 	);
 }

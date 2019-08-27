@@ -19,7 +19,7 @@ export function ChecklistsList() {
 				<li
 					key={list.id}
 					data-testid="checklists-list__item"
-					data-checklistid={list.id}
+					data-itemid={list.id}
 				>
 					<RouteLink route={{ type: 'checklist', id: list.id }}>
 						{list.data.name}

@@ -21,7 +21,7 @@ export function TasksList(props: Props) {
 				<li
 					key={task.id}
 					data-testid="tasks-list__item"
-					data-taskid={task.id}
+					data-itemid={task.id}
 				>
 					{task.data.name}
 				</li>

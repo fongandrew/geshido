@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react';
+import { Button } from '~/components/kit/button';
 import { useCurrentUser, signInWithGoogle, signOut } from '~/lib/auth';
 import { error } from '~/lib/logger';
 
@@ -19,13 +20,12 @@ export function SigninSignoutButton() {
 	}, [user]);
 
 	return (
-		<button
-			type="button"
+		<Button
 			disabled={pending || inProgress}
 			onClick={handleClick}
 			data-testid={user ? 'signout-btn' : 'signin-btn'}
 		>
 			{user ? 'Sign out' : 'Sign in with Google'}
-		</button>
+		</Button>
 	);
 }
