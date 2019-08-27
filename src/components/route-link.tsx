@@ -1,4 +1,4 @@
-import { isEqual } from 'lodash';
+import isEqual from 'lodash/isEqual';
 import React from 'react';
 import { Route, pathForRoute } from '~/lib/routes';
 import { Link } from './kit/link';

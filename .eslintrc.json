@@ -11,10 +11,11 @@
 		"prettier",
 		"prettier/@typescript-eslint"
 	],
-	"plugins": ["@typescript-eslint", "jest", "react-hooks"],
+	"plugins": ["@typescript-eslint", "jest", "lodash", "react-hooks"],
 	"rules": {
 		"import/prefer-default-export": "off",
 		"import/no-default-export": "warn",
+		"lodash/import-scope": ["error", "method"],
 		"prefer-destructuring": "off",
 		"react-hooks/rules-of-hooks": "error",
 		"react/destructuring-assignment": "off",
@@ -47,7 +48,8 @@
 				"expect": true
 			},
 			"rules": {
-				"import/no-extraneous-dependencies": "off"
+				"import/no-extraneous-dependencies": "off",
+				"lodash/import-scope": "off"
 			}
 		},
 		{
@@ -59,7 +61,8 @@
 				"import/no-extraneous-dependencies": "off",
 				"jest/no-disabled-tests": "warn",
 				"jest/no-focused-tests": "error",
-				"jest/no-identical-title": "error"
+				"jest/no-identical-title": "error",
+				"lodash/import-scope": "off"
 			}
 		}
     ]
