@@ -1,7 +1,6 @@
-import { firestore } from 'firebase/app';
 import { createAction } from '~/lib/actions';
 import { checkFirestoreType } from '~/lib/check-firestore-type';
-import { db } from '~/lib/firebase';
+import { db, firebase } from '~/lib/firebase';
 import { useSelector } from '~/lib/firestore-selector';
 import { useDocument, useQuery } from '~/lib/firestore-sub';
 import { CHECKLISTS_COLLECTION_NAME } from './checklists';
@@ -28,7 +27,7 @@ export const createTaskForChecklist = createAction(
 			.add(
 				checkFirestoreType<Task>({
 					...task,
-					lastTouched: firestore.FieldValue.serverTimestamp(),
+					lastTouched: firebase.firestore.FieldValue.serverTimestamp(),
 				})
 			);
 	}

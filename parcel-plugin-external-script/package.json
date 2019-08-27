@@ -1,0 +1,10 @@
+{
+	"name": "parcel-plugin-external-script",
+	"version": "0.1.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {},
+	"author": "Andrew Fong",
+	"license": "MIT",
+	"devDependencies": {}
+}

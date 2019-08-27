@@ -1,8 +1,7 @@
-import firebase from 'firebase/app';
 import { useState, useEffect } from 'react';
 import { createAction } from './actions';
 import { DataObject } from './data';
-import { auth } from './firebase';
+import { auth, firebase } from './firebase';
 
 // Set default for auth language
 auth.useDeviceLanguage();

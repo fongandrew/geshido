@@ -1,11 +1,7 @@
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/firestore';
+import firebaseNamespace from 'firebase/app';
 
-// NB: Firebase initialization happens lazily in boot.ts
+// Firebase stored on global scipe via script tags
+export const firebase: typeof firebaseNamespace = (window as any).firebase;
 
 export const auth = firebase.auth();
 export const db = firebase.firestore();
-
-// Expose firebase for debugging / Cypress tests
-(window as any).firebase = firebase;
