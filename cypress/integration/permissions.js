@@ -62,12 +62,11 @@ describe('Permissions', () => {
 
 		// Get checklist ID from href
 		let checklistId;
-		cy.contains(
-			'[data-testid="checklists-list__item"] a',
-			'Checklist 1'
-		).then(elm => {
-			checklistId = last(elm.attr('href').split('/'));
-		});
+		cy.contains('[data-testid="checklists-list"] a', 'Checklist 1').then(
+			elm => {
+				checklistId = last(elm.attr('href').split('/'));
+			}
+		);
 
 		// Callback to get document ref
 		assertNoReadWrite(win =>
@@ -88,10 +87,7 @@ describe('Permissions', () => {
 			.type('Checklist 2{enter}');
 
 		// Go to checklist page
-		cy.contains(
-			'[data-testid="checklists-list__item"] a',
-			'Checklist 2'
-		).click();
+		cy.contains('[data-testid="checklists-list"] a', 'Checklist 2').click();
 
 		// Create a task
 		cy.get('[data-testid="create-task__form"]')
@@ -106,7 +102,10 @@ describe('Permissions', () => {
 
 		// Extrapolate task ID from data attrs
 		let taskId;
-		cy.contains('[data-testid="tasks-list__item"]', 'Task 1').then(elm => {
+		cy.contains(
+			'[data-testid="tasks-list"] [data-testid="list__item"]',
+			'Task 1'
+		).then(elm => {
 			taskId = elm.data('itemid');
 		});
 

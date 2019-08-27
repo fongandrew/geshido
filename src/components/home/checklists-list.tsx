@@ -1,6 +1,21 @@
 import React from 'react';
-import { useChecklistsForCurrentUser } from '~/stores/checklists';
+import { QueryDocumentDataObject } from '~/lib/data';
+import { List } from '~/components/kit/list';
+import { useChecklistsForCurrentUser, Checklist } from '~/stores/checklists';
 import { RouteLink } from '~/components/route-link';
+
+/**
+ * Render a single checklist in list, passed to list renderer
+ * @param list - Checklist to render
+ * @returns - JSX
+ */
+function renderItem(list: QueryDocumentDataObject<Checklist>) {
+	return (
+		<RouteLink route={{ type: 'checklist', id: list.id }}>
+			{list.data.name}
+		</RouteLink>
+	);
+}
 
 /**
  * React component for a list of checklists this user has created
@@ -14,18 +29,10 @@ export function ChecklistsList() {
 		return <span data-testid="checklists-list">No checklists found</span>;
 
 	return (
-		<ul data-testid="checklists-list">
-			{checklists.data.map(list => (
-				<li
-					key={list.id}
-					data-testid="checklists-list__item"
-					data-itemid={list.id}
-				>
-					<RouteLink route={{ type: 'checklist', id: list.id }}>
-						{list.data.name}
-					</RouteLink>
-				</li>
-			))}
-		</ul>
+		<List
+			data-testid="checklists-list"
+			items={checklists.data}
+			renderItem={renderItem}
+		/>
 	);
 }

@@ -20,8 +20,7 @@ describe('Tasks', () => {
 
 		// Helpers for inspecting / manipulating form
 		const getForm = () => cy.get('[data-testid="create-task__form"]');
-		const getItem = text =>
-			cy.contains('[data-testid="tasks-list__item"]', text);
+		const getItem = text => cy.contains('[data-testid="list__item"]', text);
 
 		// Create using KB
 		getForm()

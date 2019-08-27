@@ -14,8 +14,7 @@ describe('Checklists', () => {
 
 		// Helpers for inspecting / manipulating form
 		const getForm = () => cy.get('[data-testid="create-checklist__form"]');
-		const getItem = text =>
-			cy.contains('[data-testid="checklists-list__item"]', text);
+		const getItem = text => cy.contains('[data-testid="list__item"]', text);
 
 		// Create using KB
 		getForm()

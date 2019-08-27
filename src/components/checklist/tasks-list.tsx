@@ -1,8 +1,19 @@
 import React from 'react';
-import { useTasksForChecklist } from '~/stores/tasks';
+import { QueryDocumentDataObject } from '~/lib/data';
+import { List } from '~/components/kit/list';
+import { useTasksForChecklist, Task } from '~/stores/tasks';
 
 export interface Props {
 	checklistId: string;
+}
+
+/**
+ * Render a single task in list, passed to list renderer
+ * @param task - Task to render
+ * @returns - JSX
+ */
+function renderItem(task: QueryDocumentDataObject<Task>) {
+	return <span>{task.data.name}</span>;
 }
 
 /**
@@ -16,16 +27,10 @@ export function TasksList(props: Props) {
 		return <span data-testid="tasks-list">No tasks found</span>;
 
 	return (
-		<ul data-testid="tasks-list">
-			{tasks.data.map(task => (
-				<li
-					key={task.id}
-					data-testid="tasks-list__item"
-					data-itemid={task.id}
-				>
-					{task.data.name}
-				</li>
-			))}
-		</ul>
+		<List
+			data-testid="tasks-list"
+			items={tasks.data}
+			renderItem={renderItem}
+		/>
 	);
 }
