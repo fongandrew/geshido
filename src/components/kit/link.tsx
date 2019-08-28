@@ -20,13 +20,14 @@ export const Link = React.memo((props: Props) => {
 		target = '_blank';
 	}
 
+	const { href, onClick } = props;
 	const handleClick = useCallback(
 		(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
 			e.preventDefault();
-			navigateTo(props.href);
-			return props.onClick && props.onClick(e);
+			navigateTo(href);
+			return onClick && onClick(e);
 		},
-		[props.href]
+		[href, onClick]
 	);
 
 	// Explicit props.href needed to make jsx-a11y linter happy
