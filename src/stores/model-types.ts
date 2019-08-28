@@ -2,6 +2,7 @@
  * Shared type definitions we can pass around without creating a circular
  * dependency
  */
+import { firestore } from 'firebase/app';
 import { HasPermissions } from '~/lib/permissions';
 
 /**
@@ -11,7 +12,7 @@ export interface Checkin {
 	/** ID of the user checking in */
 	uid: string;
 	/** Timestamp for the checkin */
-	createdOn: Date;
+	createdOn: firestore.Timestamp;
 }
 
 /**
@@ -23,14 +24,14 @@ export interface Task {
 	/** If the task is archived / complete */
 	archived?: boolean;
 	/** When the checklist originally created? */
-	createdOn: Date;
+	createdOn: firestore.Timestamp;
 	/** Copy of last checkin */
 	lastCheckin?: Checkin;
 	/**
 	 * Last modified date (based on createdOn and last checkin, copied here
 	 * because sorting on possibly undefined value doesn't work
 	 */
-	lastModified: Date;
+	lastModified: firestore.Timestamp;
 }
 
 /**
@@ -40,12 +41,12 @@ export interface Checklist extends HasPermissions {
 	/** User-assigned name for checklist */
 	name: string;
 	/** When the checklist originally created? */
-	createdOn: Date;
+	createdOn: firestore.Timestamp;
 	/** Copy of last checkin */
 	lastCheckin?: Checkin;
 	/**
 	 * Last modified date (based on createdOn and last checkin, copied here
 	 * because sorting on possibly undefined value doesn't work
 	 */
-	lastModified: Date;
+	lastModified: firestore.Timestamp;
 }

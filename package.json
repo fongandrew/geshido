@@ -68,6 +68,7 @@
 		"typescript": "^3.5.3"
 	},
 	"dependencies": {
+		"dayjs": "^1.8.16",
 		"firebase": "^6.3.5",
 		"history": "^4.9.0",
 		"lodash": "^4.17.15",

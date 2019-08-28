@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { QueryDocumentDataObject } from '~/lib/data';
 import { List } from '~/components/kit/list';
+import { RelativeTimestamp } from '~/components/task/relative-timestamp';
 import { Task } from '~/stores/model-types';
 import { useTasksForChecklist } from '~/stores/tasks';
 import { CheckinButton } from './checkin-button';
@@ -17,6 +18,11 @@ export function TasksList(props: Props) {
 		(task: QueryDocumentDataObject<Task>) => (
 			<>
 				<span>{task.data.name}</span>
+				<RelativeTimestamp
+					timestamp={
+						task.data.lastCheckin && task.data.lastCheckin.createdOn
+					}
+				/>
 				<CheckinButton
 					checklistId={props.checklistId}
 					taskId={task.id}
