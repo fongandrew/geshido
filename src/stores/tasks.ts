@@ -4,11 +4,7 @@ import { db, firebase } from '~/lib/firebase';
 import { useSelector } from '~/lib/firestore-selector';
 import { useDocument, useQuery } from '~/lib/firestore-sub';
 import { CHECKLISTS_COLLECTION_NAME } from './checklists';
-
-export interface Task {
-	name: string;
-	lastTouched: Date;
-}
+import { Task } from './model-types';
 
 export const TASKS_COLLECTION_NAME = 'tasks';
 
@@ -27,7 +23,8 @@ export const createTaskForChecklist = createAction(
 			.add(
 				checkFirestoreType<Task>({
 					...task,
-					lastTouched: firebase.firestore.FieldValue.serverTimestamp(),
+					createdOn: firebase.firestore.FieldValue.serverTimestamp(),
+					lastModified: firebase.firestore.FieldValue.serverTimestamp(),
 				})
 			);
 	}
@@ -44,7 +41,8 @@ export function useTasksForChecklist(checklistId: string) {
 				.collection(CHECKLISTS_COLLECTION_NAME)
 				.doc(checklistId)
 				.collection(TASKS_COLLECTION_NAME)
-				.orderBy('lastTouched', 'desc'),
+				.orderBy('lastModified', 'desc')
+				.orderBy('createdOn', 'desc'),
 		[]
 	);
 	return useQuery<Task>(query);

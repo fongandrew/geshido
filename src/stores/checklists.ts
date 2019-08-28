@@ -1,20 +1,12 @@
 import { createAction } from '~/lib/actions';
 import { getCurrentUser } from '~/lib/auth';
 import { checkFirestoreType } from '~/lib/check-firestore-type';
-import { db } from '~/lib/firebase';
+import { db, firebase } from '~/lib/firebase';
 import { UserNotLoggedInError } from '~/lib/firestore-errors';
 import { useSelector } from '~/lib/firestore-selector';
 import { useDocument, useQuery } from '~/lib/firestore-sub';
-import {
-	HasPermissions,
-	firestorePermissionQuery,
-	READ,
-	WRITE,
-} from '~/lib/permissions';
-
-export interface Checklist extends HasPermissions {
-	name: string;
-}
+import { firestorePermissionQuery, READ, WRITE } from '~/lib/permissions';
+import { Checklist } from './model-types';
 
 export const CHECKLISTS_COLLECTION_NAME = 'checklists';
 
@@ -34,6 +26,8 @@ export const createChecklistForCurrentUser = createAction(
 					[READ]: [currentUser.uid],
 					[WRITE]: [currentUser.uid],
 				},
+				createdOn: firebase.firestore.FieldValue.serverTimestamp(),
+				lastModified: firebase.firestore.FieldValue.serverTimestamp(),
 			})
 		);
 	}
@@ -49,7 +43,9 @@ export function useChecklistsForCurrentUser() {
 		currentUserId =>
 			db
 				.collection(CHECKLISTS_COLLECTION_NAME)
-				.where(...firestorePermissionQuery(currentUserId, READ)),
+				.where(...firestorePermissionQuery(currentUserId, READ))
+				.orderBy('lastModified', 'desc')
+				.orderBy('createdOn', 'desc'),
 		[currentUser.uid]
 	);
 	return useQuery<Checklist>(query);

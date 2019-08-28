@@ -1,7 +1,8 @@
 import React from 'react';
 import { QueryDocumentDataObject } from '~/lib/data';
 import { List } from '~/components/kit/list';
-import { useChecklistsForCurrentUser, Checklist } from '~/stores/checklists';
+import { Checklist } from '~/stores/model-types';
+import { useChecklistsForCurrentUser } from '~/stores/checklists';
 import { RouteLink } from '~/components/route-link';
 
 /**

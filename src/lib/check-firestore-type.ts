@@ -16,3 +16,12 @@ export type WithServerTS<T> = {
 export function checkFirestoreType<T>(t: WithServerTS<T>) {
 	return t;
 }
+
+/**
+ * Same as checkFirestoreType, but checks a partial for update operations
+ * @param t - The value to check
+ * @returns The value passed
+ */
+export function checkFirestoreUpdateType<T>(t: Partial<WithServerTS<T>>) {
+	return t;
+}
