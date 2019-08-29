@@ -112,7 +112,9 @@ export function useDocument<T>(ref: MemoizedDocumentReference) {
 					// Note that each call to a snapshot's data() method creates
 					// a clone of the data object. Premature optimization now, but
 					// this could probably be memoized globally for React perf.
-					const data = snapshot.data() as T;
+					const data = snapshot.data({
+						serverTimestamps: 'estimate',
+					}) as T;
 					if (snapshot.exists) {
 						setState({ id, data });
 					} else {
@@ -179,7 +181,9 @@ export function useQuery<T>(query: MemoizedQuery) {
 					case 'modified':
 						docMap[change.doc.id] = {
 							id: change.doc.id,
-							data: change.doc.data() as T,
+							data: change.doc.data({
+								serverTimestamps: 'estimate',
+							}) as T,
 						};
 						break;
 					case 'removed':
@@ -204,7 +208,9 @@ export function useQuery<T>(query: MemoizedQuery) {
 					logger.error(`Missing doc ID in map: ${docRef.id}`);
 					data.push({
 						id: docRef.id,
-						data: docRef.data() as T,
+						data: docRef.data({
+							serverTimestamps: 'estimate',
+						}) as T,
 					});
 				}
 			});
