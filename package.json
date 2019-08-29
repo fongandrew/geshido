@@ -59,7 +59,7 @@
 		"eslint-plugin-lodash": "^6.0.0",
 		"eslint-plugin-react": "^7.14.3",
 		"eslint-plugin-react-hooks": "^1.6.0",
-		"firebase-tools": "^7.2.2",
+		"firebase-tools": "^7.3.0",
 		"jest": "^24.9.0",
 		"parcel-bundler": "^1.12.3",
 		"parcel-plugin-external-script": "file:parcel-plugin-external-script",
