@@ -1,4 +1,19 @@
 {
-  "indexes": [],
-  "fieldOverrides": []
+	"indexes": [
+		{
+			"collectionGroup": "checklists",
+			"queryScope": "COLLECTION",
+			"fields": [
+				{
+					"fieldPath": "permissions.read",
+					"arrayConfig": "CONTAINS"
+				},
+				{
+					"fieldPath": "lastModified",
+					"order": "ASCENDING"
+				}
+			]
+		}
+	],
+	"fieldOverrides": []
 }

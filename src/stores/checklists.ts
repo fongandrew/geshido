@@ -44,8 +44,7 @@ export function useChecklistsForCurrentUser() {
 			db
 				.collection(CHECKLISTS_COLLECTION_NAME)
 				.where(...firestorePermissionQuery(currentUserId, READ))
-				.orderBy('lastModified', 'desc')
-				.orderBy('createdOn', 'desc'),
+				.orderBy('lastModified', 'asc'),
 		[currentUser.uid]
 	);
 	return useQuery<Checklist>(query);

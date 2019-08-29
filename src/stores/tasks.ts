@@ -41,8 +41,7 @@ export function useTasksForChecklist(checklistId: string) {
 				.collection(CHECKLISTS_COLLECTION_NAME)
 				.doc(checklistId)
 				.collection(TASKS_COLLECTION_NAME)
-				.orderBy('lastModified', 'desc')
-				.orderBy('createdOn', 'desc'),
+				.orderBy('lastModified', 'asc'),
 		[]
 	);
 	return useQuery<Task>(query);
