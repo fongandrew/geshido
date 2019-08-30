@@ -1,6 +1,6 @@
 import React from 'react';
 import { QueryDocumentDataObject } from '~/lib/data';
-import { List } from '~/components/kit/list';
+import { StableList } from '~/components/kit/stable-list';
 import { Checklist } from '~/stores/model-types';
 import { useChecklistsForCurrentUser } from '~/stores/checklists';
 import { RouteLink } from '~/components/route-link';
@@ -30,7 +30,7 @@ export function ChecklistsList() {
 		return <span data-testid="checklists-list">No checklists found</span>;
 
 	return (
-		<List
+		<StableList
 			data-testid="checklists-list"
 			items={checklists.data}
 			renderItem={renderItem}

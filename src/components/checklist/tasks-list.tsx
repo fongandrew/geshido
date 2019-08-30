@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { QueryDocumentDataObject } from '~/lib/data';
-import { List } from '~/components/kit/list';
+import { StableList } from '~/components/kit/stable-list';
 import { RelativeTimestamp } from '~/components/task/relative-timestamp';
 import { Task } from '~/stores/model-types';
 import { useTasksForChecklist } from '~/stores/tasks';
@@ -39,7 +39,7 @@ export function TasksList(props: Props) {
 		return <span data-testid="tasks-list">No tasks found</span>;
 
 	return (
-		<List
+		<StableList
 			data-testid="tasks-list"
 			items={tasks.data}
 			renderItem={renderItem}
