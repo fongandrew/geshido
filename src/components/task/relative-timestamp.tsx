@@ -10,7 +10,11 @@ export interface Props {
  * Component for displaying a relative date and time for tasks
  */
 export function RelativeTimestamp({ timestamp }: Props) {
-	if (!timestamp) return <span>Never</span>;
+	if (!timestamp) return <span data-testid="relative-timestamp">Never</span>;
 	const date = timestamp.toDate();
-	return <span title={formatDate(date)}>{relativeDaysAgo(date)}</span>;
+	return (
+		<span title={formatDate(date)} data-testid="relative-timestamp">
+			{relativeDaysAgo(date)}
+		</span>
+	);
 }

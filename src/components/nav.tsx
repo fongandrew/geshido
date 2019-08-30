@@ -5,7 +5,9 @@ import { SigninSignoutButton } from './signin-signout-button';
 export function Nav() {
 	return (
 		<nav>
-			<RouteLink route={{ type: 'home' }}>Home</RouteLink>
+			<RouteLink route={{ type: 'home' }} data-testid="nav__home">
+				Home
+			</RouteLink>
 			{' | '}
 			<SigninSignoutButton />
 		</nav>

@@ -17,7 +17,9 @@ export function TasksList(props: Props) {
 	const renderItem = useCallback(
 		(task: QueryDocumentDataObject<Task>) => (
 			<>
-				<span>{task.data.name}</span>
+				<span data-testid="tasks-list__task-name">
+					{task.data.name}
+				</span>
 				<RelativeTimestamp
 					timestamp={
 						task.data.lastCheckin && task.data.lastCheckin.createdOn
