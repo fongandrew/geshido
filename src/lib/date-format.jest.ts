@@ -35,16 +35,6 @@ describe('relativeDaysAgo', () => {
 		expect(relativeDaysAgo(minutesAgo(60 * 30))).toEqual('Yesterday');
 	});
 
-	it('handles DST boundary correctly', () => {
-		// November 3, 2019 is fall back for US DST
-		expect(
-			relativeDaysAgo(
-				new Date(2019, 10, 3),
-				new Date(2019, 10, 3, 23, 59)
-			)
-		).toEqual('24 hours ago');
-	});
-
 	it('handles older times correctly', () => {
 		expect(relativeDaysAgo(minutesAgo(60 * 24 * 5))).toEqual('5 days ago');
 	});
