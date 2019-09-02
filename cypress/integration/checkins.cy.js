@@ -6,20 +6,13 @@ describe('Checkins', () => {
 	// Helpers for inspecting / manipulating form
 	const getItem = text => cy.contains('[data-testid="list__item"]', text);
 	const assertItems = (subselector, expected) => {
-		const items = [];
-		cy.get('[data-testid="list__item"]')
-			.find(subselector)
-			.each(item => {
-				items.push(item.text());
-			})
-			.then(() => {
-				expect(items).to.deep.equal(
-					expected,
-					`Expected ${JSON.stringify(
-						items
-					)} to deep equal ${JSON.stringify(expected)}`
-				);
+		cy.get(`[data-testid="list__item"] ${subselector}`).should(items => {
+			const actual = [];
+			items.each((index, elm) => {
+				actual.push(elm.innerText);
 			});
+			expect(actual).to.deep.equal(expected);
+		});
 	};
 
 	it('updates date and ordering', () => {
